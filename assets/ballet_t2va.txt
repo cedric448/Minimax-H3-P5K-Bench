@@ -1,0 +1,8 @@
+integrated_multimodal_description:
+[Shot 1] Live-action, cinematic, a medium-wide shot frames a seven-year-old girl in a simple white ballet leotard and soft pink tutu, dancing barefoot on a grassy lawn bathed in warm, low golden sunlight of a quiet morning. She rises onto her toes, lifts her arms overhead, and begins a slow, graceful pirouette; her loose chestnut-brown hair lifts and streams behind her as she spins, each strand catching the sunlight. [Shot 2] At 00:04.800, the camera cuts to a closer medium tracking shot as she runs a few light steps forward, springs into a high ballet leap with both legs extended, then lands softly on the grass with bent knees. She rises and finishes with a relaxed, natural smile, slightly out of breath, while her hair settles gently around her shoulders in the breeze.
+
+overall_soundscape:
+A gentle breeze rustles the surrounding leaves and grass while birds chirp softly in the distance. Her light footsteps and the whisper of the tulle tutu accompany each spin and leap, along with soft, cheerful breathing.
+
+non_diegetic_music:
+A warm solo-piano piece at a moderate tempo with light, skipping arpeggios that swell gently beneath her leap and fade out softly at the end.

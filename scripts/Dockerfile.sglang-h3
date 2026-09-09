@@ -1,0 +1,17 @@
+# sglang-h3:sm120-v2 构建记录(完整可复现)
+# 基础镜像 lmsysorg/sglang:latest(NGC 底座,自带 torch 2.13.0+cu130)
+# 关键点:基础镜像自带 diffusers 0.37.0 早于 H3 开源,必须升级到 >=0.38
+# 构建机需能访问腾讯云 pypi 镜像(内网);镜像约 53.7GB
+
+FROM lmsysorg/sglang:latest
+
+# 1) diffusion 服务路径依赖 + INT8/NVFP4 量化内核(comfy-kitchen)
+RUN pip install -i https://mirrors.cloud.tencent.com/pypi/simple \
+    --pre "sglang[diffusion]" comfy-kitchen
+
+# 2) 升级 diffusers 至含 MiniMaxH3 的版本(0.40.0 已验证 MiniMaxH3ModularPipeline 可用)
+RUN pip install -U -i https://mirrors.cloud.tencent.com/pypi/simple diffusers==0.40.0
+
+# 版本快照(2026-09-09 验证):
+#   sglang 0.5.19 / torch 2.13.0+cu130 / diffusers 0.40.0 / transformers 5.12.1 / comfy-kitchen 0.2.33
+#   MiniMaxH3ModularPipeline / Qwen3VLForConditionalGeneration import OK

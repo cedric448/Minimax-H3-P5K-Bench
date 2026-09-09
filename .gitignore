@@ -1,0 +1,22 @@
+# 敏感信息与环境文件绝不入库
+p.md
+*.env
+.env*
+**/secret*
+
+# 权重与产物(体积过大,不入库)
+weights/
+*.safetensors
+*.mp4
+!assets/*.mp4
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# 系统与日志
+.DS_Store
+logs/
+*.log
+nohup.out
