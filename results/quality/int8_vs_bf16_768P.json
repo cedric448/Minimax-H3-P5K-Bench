@@ -1,0 +1,27 @@
+{
+  "bf16": "outputs/test2_tp2u2_t2va_768P_run0_2cd52782-24d0-4364-8ff0-b54a9082430f.mp4",
+  "int8": "outputs/test1_int8_1card_t2va_768P_run0_97ab8988-5a6c-4bbc-817e-0c2da07c2d06.mp4",
+  "grid": "/root/h3/results/quality/int8_vs_bf16_768P_grid.png",
+  "psnr_per_frame": [
+    15.88,
+    17.41,
+    18.07,
+    18.28,
+    15.27,
+    14.37,
+    15.3,
+    14.64
+  ],
+  "ssim_per_frame": [
+    0.5003,
+    0.5739,
+    0.6175,
+    0.6231,
+    0.6122,
+    0.5689,
+    0.5873,
+    0.5516
+  ],
+  "psnr_mean": 16.15,
+  "ssim_mean": 0.5793
+}

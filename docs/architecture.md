@@ -70,9 +70,9 @@ NUMA 0(CPU 0-127)                NUMA 1(CPU 128-255)
    │                                      │ Gradio WebUI 容器   │
    │                                      └────────┬───────────┘
    │                                               │ localhost
-   ├─ :30010 SGLang 实例1(FL2VA, GPU0-3, NUMA0)◀┘
-   ├─ :30011 SGLang 实例2(FL2VA, GPU4-7, NUMA1)
-   └─ bench.py(直连 SGLang,绕开代理,采样 nvidia-smi)
+├─ :30010 SGLang 实例1(FL2VA FP8, GPU0-3, NUMA0)◀┘
+├─ :30020 SGLang 实例2(FL2VA FP8, GPU4-7, NUMA1;注意 sglang 端口可能静默漂移,部署后 grep "Uvicorn running" 确认)
+└─ bench.py(直连 SGLang,绕开代理,采样 nvidia-smi)
 ```
 
 - SGLang 端口仅监听本机/内网,不对公网暴露(无鉴权)

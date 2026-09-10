@@ -114,7 +114,22 @@ cp /root/h3/webui/nginx_h3webui.conf /etc/nginx/conf.d/ && systemctl reload ngin
 # 访问 http://<host>:8080(仅限内网/受信 IP;公网需 HTTPS+白名单)
 ```
 
-## 4. 踩坑记录
+## 4. 安全加固(必做,实测有公网扫描)
+
+本机 CVM 带公网 IP,部署当天即观测到外部 IP 扫描 SGLang 端口(无鉴权服务)。已执行:
+
+```bash
+# SGLang/内部端口仅本机访问(30010-30012);WebUI 8080 走 Nginx Basic Auth
+for p in 30010 30011 30012; do
+  iptables -I INPUT -p tcp --dport $p -i lo -j ACCEPT
+  iptables -I INPUT -p tcp --dport $p ! -i lo -j DROP
+done
+# 注意:iptables 重启失效,需持久化(iptables-save)或改用安全组;新实例建议 --host 127.0.0.1
+```
+
+进一步建议:安全组仅放行 8080(如需公网体验 WebUI)并对源 IP 白名单;其余端口一律内网。
+
+## 5. 踩坑记录
 
 | # | 坑 | 规避 |
 |---|---|---|
@@ -128,3 +143,7 @@ cp /root/h3/webui/nginx_h3webui.conf /etc/nginx/conf.d/ && systemctl reload ngin
 | 8 | `quality:high`(Cache-DiT)仅支持 4×H200 精确负载 | 不作依赖 |
 | 9 | torch.compile 改变数值 | 质量基准一律 false |
 | 10 | COS 走公网下载收流量费 | 同地域用内网(默认域名自动解析内网) |
+| 11 | fl2va 首帧图用宿主机路径 → 服务容器内 404/500 | 图必须放到容器挂载目录(如 /outputs/),uri 用容器内路径 |
+| 12 | `--batching-max-size >1` 不产生真批处理 | sglang 0.5.19 对 H3 串行执行,该参数仅限排队长度;BF16+并发排队会在 768P OOM |
+| 13 | 服务绑定 0.0.0.0 暴露公网 | `--host 127.0.0.1` + iptables/安全组;本机实测当天即被扫描 |
+| 14 | **sglang 端口静默漂移**:请求的 --port 被占时自动改绑其他端口(strict_ports 默认 false),日志不显眼 | 多实例部署必须 grep `Uvicorn running` 确认实际端口;或传 `--strict-ports true`;实例内部服务也可能占用相邻端口(实测 30011 被实例1 的内部服务抢占) |

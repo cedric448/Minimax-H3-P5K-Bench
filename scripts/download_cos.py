@@ -52,7 +52,7 @@ def download_one(client, key, size, dest):
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     tmp = dest + ".part"
     client.download_file(Bucket=BUCKET, Key=key, DestFilePath=tmp,
-                         MaxConcurrency=5, PartSize=20)
+                         MAXThread=5, PartSize=20)
     os.replace(tmp, dest)
     if os.path.getsize(dest) != size:
         return ("size_mismatch", key, size)
@@ -74,7 +74,7 @@ def main():
     if not objs:
         sys.exit("COS 上该变体还没有文件(Ref2VA 尚未上传完成)")
 
-    dest_root = os.path.join(DEST_ROOT, args.variant)
+    dest_root = DEST_ROOT  # key 已含变体子目录(FL2VA/xxx),不再拼接变体名
     t0 = time.time()
     stats = {"ok": 0, "skip": 0, "size_mismatch": 0}
     done_bytes = 0
