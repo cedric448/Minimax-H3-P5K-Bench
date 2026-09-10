@@ -10,9 +10,12 @@ COPY app.py /app/app.py
 COPY prompts/ballet_t2va.txt /app/prompts/ballet_t2va.txt
 
 ENV SGLANG_ENDPOINT=http://127.0.0.1:30010 \
-    WEBUI_OUT_DIR=/data/outputs/webui \
+    WEBUI_OUT_DIR=/outputs/webui \
     WEBUI_PROMPT_FILE=/app/prompts/ballet_t2va.txt \
     no_proxy=127.0.0.1,localhost
+
+# 运行时须与 SGLang 容器使用相同挂载点(-v /root/h3/outputs:/outputs),
+# 否则上传的首帧图对 SGLang 容器不可见(跨容器路径一致性)
 
 # --network host 模式运行,直接访问宿主机 SGLang 与输出目录
 EXPOSE 7860
