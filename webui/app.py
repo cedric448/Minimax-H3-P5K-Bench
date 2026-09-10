@@ -98,7 +98,8 @@ def generate(prompt, tier_label, duration, seed, steps, task, ref_image):
             if status in ("failed", "cancelled"):
                 raise gr.Error(f"生成失败: {str(st)[:300]}")
             time.sleep(2)
-        out_path = os.path.join(OUT_DIR, f"{task[:4]}_{tier_label.split()[0]}_{uuid.uuid4().hex[:8]}.mp4")
+        out_path = os.path.join(OUT_DIR, f"{'fl2va' if task.startswith('图生视频') else 't2va'}_"
+                                         f"{tier_label.split()[0]}_{uuid.uuid4().hex[:8]}.mp4")
         with SESSION.get(f"{SGLANG_ENDPOINT}/v1/videos/{vid}/content",
                          timeout=600, stream=True) as r:
             if r.status_code >= 400:
@@ -109,10 +110,14 @@ def generate(prompt, tier_label, duration, seed, steps, task, ref_image):
     except requests.ConnectionError:
         raise gr.Error(f"无法连接 SGLang 服务({SGLANG_ENDPOINT}),请确认服务已启动")
     elapsed = time.time() - t0
-    return out_path, f"完成:耗时 {elapsed:.1f}s,文件 {os.path.basename(out_path)}"
+    return out_path, (f"完成:耗时 {elapsed:.1f}s | "
+                      f"[下载此视频](/gradio_api/file={out_path})(链接持久有效,页面关闭后仍可下载)")
 
 
 def build_ui():
+    # static_paths:输出目录中的文件不被移动到易失会话缓存,直接从原位稳定提供
+    # (否则会话关闭后文件被 GC 删除,导致预览/下载 403)
+    gr.set_static_paths([OUT_DIR])
     with gr.Blocks(title="MiniMax-H3 WebUI") as demo:
         gr.Markdown(f"# MiniMax-H3 视频生成\n后端:`{SGLANG_ENDPOINT}`(SGLang /v1/videos)")
         with gr.Row():
